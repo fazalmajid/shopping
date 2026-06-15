@@ -226,6 +226,7 @@ function handleSSEEvent({type, data}) {
 
 // ── Rendering ──────────────────────────────────────────────────────────────
 function renderAll() {
+  rebuildItemSuggestions();
   const container = document.getElementById('sections-container');
   container.innerHTML = '';
 
@@ -315,6 +316,22 @@ function animateChecked(id, checked) {
     row.classList.remove('checked', 'fading');
     row.querySelector('input[type="checkbox"]').checked = false;
   }
+}
+
+// ── Item suggestions datalist ──────────────────────────────────────────────
+function rebuildItemSuggestions() {
+  const dl = document.getElementById('item-suggestions');
+  if (!dl) return;
+  const seen = new Set();
+  dl.innerHTML = '';
+  Object.values(state.items).forEach(it => {
+    const key = it.text.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    const opt = document.createElement('option');
+    opt.value = it.text;
+    dl.appendChild(opt);
+  });
 }
 
 // ── Section select ─────────────────────────────────────────────────────────

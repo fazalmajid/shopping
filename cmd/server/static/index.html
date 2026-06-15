@@ -51,7 +51,8 @@
     </header>
 
     <form id="add-item-form">
-      <input id="new-item-text" type="text" placeholder="Add item…" autocomplete="off">
+      <input id="new-item-text" type="text" placeholder="Add item…" list="item-suggestions" autocomplete="off">
+      <datalist id="item-suggestions"></datalist>
       <select id="new-item-section">
         <option value="">Auto-detect</option>
       </select>
