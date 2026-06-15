@@ -1,0 +1,6 @@
+bin/
+llama/
+models/
+.cache/
+.env
+*~

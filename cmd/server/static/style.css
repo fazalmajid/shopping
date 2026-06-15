@@ -1,0 +1,228 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --danger: #dc2626;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── layout ── */
+.view { display: none; }
+.view.active { display: block; }
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+/* ── auth views ── */
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  margin-top: 4rem;
+}
+.auth-card h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.auth-card p  { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+
+/* ── main app ── */
+header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+header h1 { font-size: 1.4rem; flex: 1; }
+
+/* ── forms ── */
+input[type="text"],
+input[type="email"] {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+input:focus { border-color: var(--accent); }
+
+select {
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button {
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s, opacity 0.15s;
+}
+button:disabled { opacity: 0.5; cursor: default; }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover:not(:disabled) { background: var(--border); color: var(--text); }
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid transparent;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.8rem;
+}
+.btn-danger:hover { background: #fef2f2; }
+
+/* ── add-item form ── */
+#add-item-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+#add-item-form input { flex: 1; min-width: 140px; }
+
+/* ── sections ── */
+#sections-container { display: flex; flex-direction: column; gap: 0.5rem; }
+
+details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+summary {
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: "▶";
+  font-size: 0.65rem;
+  color: var(--muted);
+  transition: transform 0.15s;
+  display: inline-block;
+  width: 1em;
+}
+details[open] summary::before { transform: rotate(90deg); }
+
+.section-count {
+  margin-left: auto;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+  background: var(--bg);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+/* ── items ── */
+.item-list { padding: 0 0 0.25rem; }
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem;
+  border-top: 1px solid var(--border);
+  transition: opacity 0.4s, text-decoration 0.1s;
+}
+.item input[type="checkbox"] { flex-shrink: 0; width: 1.1rem; height: 1.1rem; cursor: pointer; accent-color: var(--accent); }
+.item-text { flex: 1; font-size: 0.95rem; }
+
+.item.checked .item-text {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.item.fading { opacity: 0; }
+
+/* classifying placeholder */
+.classifying-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-left: auto;
+}
+
+/* ── modal / dialog ── */
+dialog {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+  padding: 1.5rem;
+  min-width: 320px;
+  max-width: 90vw;
+}
+dialog::backdrop { background: rgba(0,0,0,0.35); }
+dialog h2 { margin-bottom: 1rem; font-size: 1.1rem; }
+dialog .dialog-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+
+.section-list-items { list-style: none; margin-bottom: 1rem; max-height: 200px; overflow-y: auto; }
+.section-list-items li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.section-list-items li:last-child { border-bottom: none; }
+
+.add-section-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.add-section-row input { flex: 1; }
+
+.error-msg {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+/* ── responsive ── */
+@media (max-width: 480px) {
+  header { gap: 0.5rem; }
+  button { padding: 0.5rem 0.7rem; font-size: 0.85rem; }
+}

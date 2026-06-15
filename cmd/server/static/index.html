@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping List</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ── Login view ── -->
+<div id="view-login" class="view">
+  <div class="container">
+    <div class="auth-card">
+      <h1>Shopping List</h1>
+      <p>Sign in with your passkey to access the shared list.</p>
+      <input id="login-email" type="email" placeholder="your@email.com" autocomplete="email">
+      <br><br>
+      <button id="btn-login" class="btn-primary">Sign in with Passkey</button>
+      <p id="login-error" class="error-msg" style="display:none"></p>
+      <p style="margin-top:1rem;font-size:0.85rem;color:var(--muted)">
+        Need an account? Ask a member to invite you.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Register view (shown when ?invite=TOKEN in URL) ── -->
+<div id="view-register" class="view">
+  <div class="container">
+    <div class="auth-card">
+      <h1>Create Account</h1>
+      <p id="register-email-display"></p>
+      <input id="register-displayname" type="text" placeholder="Your name" autocomplete="name">
+      <br><br>
+      <button id="btn-register" class="btn-primary">Register Passkey</button>
+      <p id="register-error" class="error-msg" style="display:none"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main app view ── -->
+<div id="view-app" class="view">
+  <div class="container">
+    <header>
+      <h1>🛒 Shopping List</h1>
+      <button id="btn-clear-checked" class="btn-ghost">Clear checked</button>
+      <button id="btn-manage-sections" class="btn-ghost">Sections</button>
+      <button id="btn-invite" class="btn-ghost">Invite</button>
+      <button id="btn-logout" class="btn-ghost">Logout</button>
+    </header>
+
+    <form id="add-item-form">
+      <input id="new-item-text" type="text" placeholder="Add item…" autocomplete="off">
+      <select id="new-item-section">
+        <option value="">Auto-detect</option>
+      </select>
+      <button type="submit" class="btn-primary">Add</button>
+    </form>
+
+    <div id="sections-container"></div>
+  </div>
+</div>
+
+<!-- ── Invite modal ── -->
+<dialog id="modal-invite">
+  <h2>Invite Someone</h2>
+  <input id="invite-email" type="email" placeholder="friend@example.com">
+  <p id="invite-error" class="error-msg" style="display:none"></p>
+  <div class="dialog-actions">
+    <button id="btn-cancel-invite" class="btn-ghost">Cancel</button>
+    <button id="btn-send-invite" class="btn-primary">Send invite</button>
+  </div>
+</dialog>
+
+<!-- ── Manage sections modal ── -->
+<dialog id="modal-sections">
+  <h2>Grocery Sections</h2>
+  <ul id="section-list-items" class="section-list-items"></ul>
+  <div class="add-section-row">
+    <input id="new-section-name" type="text" placeholder="New section name">
+    <button id="btn-add-section" class="btn-primary">Add</button>
+  </div>
+  <p id="section-error" class="error-msg" style="display:none"></p>
+  <div class="dialog-actions">
+    <button id="btn-close-sections" class="btn-ghost">Close</button>
+  </div>
+</dialog>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
