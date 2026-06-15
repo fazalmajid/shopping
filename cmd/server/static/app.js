@@ -68,8 +68,18 @@ function credentialToJSON(cred) {
 }
 
 // ── Auth flows ─────────────────────────────────────────────────────────────
+function checkSecureContext(errorId) {
+  if (!window.isSecureContext || !navigator.credentials) {
+    setError(errorId,
+      'Passkeys require a secure context. Access this app via https:// or from localhost.');
+    return false;
+  }
+  return true;
+}
+
 async function doLogin(email) {
   setError('login-error', '');
+  if (!checkSecureContext('login-error')) return;
   try {
     const beginRes = await fetch('/api/auth/login/begin', {
       method: 'POST',
@@ -97,6 +107,7 @@ async function doLogin(email) {
 
 async function doRegister(token, displayName) {
   setError('register-error', '');
+  if (!checkSecureContext('register-error')) return;
   try {
     const beginRes = await fetch('/api/auth/register/begin', {
       method: 'POST',

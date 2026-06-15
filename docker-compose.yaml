@@ -1,0 +1,37 @@
+services:
+  # Uncomment to run a local PostgreSQL container instead of an external one.
+  # If enabled, set DATABASE_URL=postgres://shopping:shopping@db/shopping?sslmode=disable in .env
+  # and uncomment the depends_on block in the app service below.
+  #
+  # db:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_DB:       shopping
+  #     POSTGRES_USER:     shopping
+  #     POSTGRES_PASSWORD: shopping
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U shopping"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+
+  app:
+    build: .
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    env_file: .env
+    environment:
+      # Paths inside the container override the .env defaults:
+      LLAMA_SERVER_PATH: /app/llama-server
+      LLAMA_MODEL_PATH:  /app/models/${MODEL_FILE:-google_gemma-4-E4B-it-Q4_K_M.gguf}
+    ports:
+      - "8080:8080"
+    volumes:
+      # Model file is large; mount from host rather than baking into the image.
+      - ./models:/app/models:ro
+
+# volumes:
+#   pgdata:

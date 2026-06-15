@@ -12,6 +12,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -37,7 +38,8 @@ type Classifier struct {
 
 	wg      sync.WaitGroup
 	predict func(text string, sections []db.Section) int
-	cmd     *exec.Cmd // non-nil when llama-server subprocess is running
+	cmd     *exec.Cmd
+	cmdDone chan struct{} // closed by a goroutine that calls cmd.Wait()
 }
 
 // New creates a Classifier. If serverBin and modelPath are both non-empty it
@@ -72,16 +74,19 @@ func New(serverBin, modelPath string, queries *db.Queries, broker *sse.Broker, s
 		"--threads", "4",
 		"--log-disable",
 	)
+	cmd.Stderr = os.Stderr
 	if err := cmd.Start(); err != nil {
 		return nil, fmt.Errorf("starting llama-server: %w", err)
 	}
 	c.cmd = cmd
+	c.cmdDone = make(chan struct{})
+	go func() { cmd.Wait(); close(c.cmdDone) }()
 
 	baseURL := fmt.Sprintf("http://127.0.0.1:%d", port)
 	log.Printf("classifier: llama-server started (pid %d), waiting for model load…", cmd.Process.Pid)
-	if err := waitReady(baseURL+"/health", 120*time.Second); err != nil {
+	if err := waitReady(c.cmdDone, baseURL+"/health", 120*time.Second); err != nil {
 		cmd.Process.Kill()
-		cmd.Wait()
+		<-c.cmdDone
 		return nil, fmt.Errorf("llama-server did not become ready: %w", err)
 	}
 	log.Println("classifier: llama-server ready")
@@ -99,7 +104,7 @@ func (c *Classifier) Stop() {
 	c.wg.Wait()
 	if c.cmd != nil {
 		c.cmd.Process.Kill()
-		c.cmd.Wait()
+		<-c.cmdDone // wait for the cmd.Wait() goroutine; avoids double-Wait
 	}
 }
 
@@ -206,9 +211,14 @@ func freePort() (int, error) {
 	return l.Addr().(*net.TCPAddr).Port, nil
 }
 
-func waitReady(healthURL string, timeout time.Duration) error {
+func waitReady(dead <-chan struct{}, healthURL string, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
+		select {
+		case <-dead:
+			return fmt.Errorf("process exited unexpectedly")
+		default:
+		}
 		resp, err := http.Get(healthURL)
 		if err == nil {
 			resp.Body.Close()
