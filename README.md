@@ -1,5 +1,7 @@
 # Shopping List
 
+This program was written by Claude Code and thus uncopyrightable. It is hereby placed in the public domain/
+
 A self-hosted shared shopping list with passkey authentication and automatic
 grocery section classification via a local LLM.
 
