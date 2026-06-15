@@ -1,6 +1,6 @@
 module shopping
 
-go 1.22
+go 1.24.0
 
 require (
 	github.com/go-webauthn/webauthn v0.10.2
@@ -22,9 +22,8 @@ require (
 	github.com/sethvargo/go-retry v0.2.4 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.21.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.18.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/sync v0.18.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 )
-
