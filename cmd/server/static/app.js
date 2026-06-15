@@ -439,8 +439,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const input = document.getElementById('new-item-text');
     const text = input.value.trim();
     if (!text) return;
-    const sectionID = document.getElementById('new-item-section').value;
+    const sel = document.getElementById('new-item-section');
+    const sectionID = sel.value;
     input.value = '';
+    sel.value = '';
     await addItem(text, sectionID);
   });
 
